@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { useAppSelector } from '@/hooks/useAppSelector'
 import { selectRewardCatalog } from '@/store/selectors'
+import RewardForm from '@/features/rewards/components/RewardForm'
+import useRewardActions from '@/features/rewards/hooks/useRewardActions'
 
 interface StepGoalProps {
   onNext: (goalId: string) => void
@@ -11,6 +13,18 @@ interface StepGoalProps {
 export default function StepGoal({ onNext }: StepGoalProps) {
   const [selected, setSelected] = useState('')
   const rewards = useAppSelector(selectRewardCatalog)
+  const { handleAddReward } = useRewardActions()
+
+  const handleFormSubmit = (
+    title: string,
+    description: string,
+    emoji: string,
+    pointCost: number
+  ) => {
+    handleAddReward(title, description, emoji, pointCost)
+    // Redux update triggers re-render — catalog now has a reward,
+    // so the component switches to the selection view automatically.
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -20,27 +34,22 @@ export default function StepGoal({ onNext }: StepGoalProps) {
   if (rewards.length === 0) {
     return (
       <div className="space-y-6">
-        <div className="text-center space-y-2 mb-8">
+        <div className="text-center space-y-2">
           <h2 className="text-2xl font-bold">What are you working toward? 🎯</h2>
           <p className="text-sm text-muted-foreground">
-            Pick a reward to keep you motivated.
+            Add your first reward to get started.
           </p>
         </div>
 
-        <Card className="p-6 text-center space-y-3 bg-muted/30 border-dashed">
-          <p className="text-2xl">🎯</p>
-          <p className="font-semibold">No rewards yet</p>
-          <p className="text-sm text-muted-foreground">
-            You can add rewards from the Rewards page after setup.
-          </p>
-        </Card>
+        <RewardForm onSubmit={handleFormSubmit} />
 
         <Button
-          onClick={() => onNext('')}
+          type="button"
+          variant="ghost"
           className="w-full"
-          size="lg"
+          onClick={() => onNext('')}
         >
-          Skip for now →
+          Skip for now
         </Button>
       </div>
     )
@@ -48,7 +57,7 @@ export default function StepGoal({ onNext }: StepGoalProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="text-center space-y-2 mb-8">
+      <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold">What are you working toward? 🎯</h2>
         <p className="text-sm text-muted-foreground">
           Pick a reward to keep you motivated.
