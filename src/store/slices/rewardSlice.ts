@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RewardsState, Reward } from '@/types'
 
+const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+
 const initialState: RewardsState = {
   catalog: [],
   unlockedIds: [],
@@ -12,9 +14,6 @@ const rewardSlice = createSlice({
   name: 'rewards',
   initialState,
   reducers: {
-    initCatalog: (state, action: PayloadAction<Reward[]>) => {
-      state.catalog = action.payload
-    },
     setGoal: (state, action: PayloadAction<string | null>) => {
       state.selectedGoalId = action.payload
     },
@@ -24,9 +23,24 @@ const rewardSlice = createSlice({
         .filter((reward) => reward.pointCost <= totalPoints)
         .map((reward) => reward.id)
     },
+    addReward: (state, action: PayloadAction<Omit<Reward, 'id'>>) => {
+      const newReward: Reward = {
+        id: generateId(),
+        ...action.payload,
+      }
+      state.catalog.push(newReward)
+    },
+    deleteReward: (state, action: PayloadAction<string>) => {
+      const rewardId = action.payload
+      state.catalog = state.catalog.filter((r) => r.id !== rewardId)
+      state.unlockedIds = state.unlockedIds.filter((id) => id !== rewardId)
+      if (state.selectedGoalId === rewardId) {
+        state.selectedGoalId = null
+      }
+    },
   },
 })
 
-export const { initCatalog, setGoal, checkUnlocks } = rewardSlice.actions
+export const { setGoal, checkUnlocks, addReward, deleteReward } = rewardSlice.actions
 
 export default rewardSlice.reducer

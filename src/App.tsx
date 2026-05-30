@@ -4,8 +4,6 @@ import { Provider, useDispatch } from 'react-redux'
 import { Toaster } from 'sonner'
 import { store } from '@/store/store'
 import { checkAndResetStreak } from '@/store/slices/streakSlice'
-import { initCatalog } from '@/store/slices/rewardSlice'
-import { rewardCatalog } from '@/services/rewardCatalog'
 import { selectHasCompletedOnboarding } from '@/store/selectors'
 import OnboardingPage from '@/pages/OnboardingPage'
 import HomePage from '@/pages/HomePage'
@@ -17,7 +15,6 @@ function AppContent() {
   const hasCompletedOnboarding = useAppSelector(selectHasCompletedOnboarding)
 
   useEffect(() => {
-    dispatch(initCatalog(rewardCatalog))
     dispatch(checkAndResetStreak())
   }, [dispatch])
 

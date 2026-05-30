@@ -1,72 +1,59 @@
-import { useAppDispatch, useAppSelector } from '@/hooks'
+import { Card } from '@/components/ui/card'
+import { useAppDispatch } from '@/hooks/useAppDispatch'
+import { useAppSelector } from '@/hooks/useAppSelector'
 import {
   selectRewardCatalog,
-  selectUnlockedRewards,
   selectCurrentGoalReward,
 } from '@/store/selectors'
 import { setGoal } from '@/store/slices/rewardSlice'
+import useRewardActions from '../hooks/useRewardActions'
 import RewardCard from './RewardCard'
 
 export default function RewardCatalog() {
   const dispatch = useAppDispatch()
   const catalog = useAppSelector(selectRewardCatalog)
-  const unlockedRewards = useAppSelector(selectUnlockedRewards)
   const currentGoal = useAppSelector(selectCurrentGoalReward)
+  const { handleDeleteReward } = useRewardActions()
+
+  const totalPoints = useAppSelector((state) => state.streaks.totalPoints)
+  const unlockedIds = catalog
+    .filter((r) => r.pointCost <= totalPoints)
+    .map((r) => r.id)
+
+  const sorted = [...catalog].sort((a, b) => a.pointCost - b.pointCost)
 
   const handleSelectGoal = (rewardId: string) => {
-    const selectedReward = catalog.find((r) => r.id === rewardId)
-    if (selectedReward && unlockedRewards.find((r) => r.id === rewardId)) {
+    if (currentGoal?.id === rewardId) {
+      dispatch(setGoal(null))
+    } else {
       dispatch(setGoal(rewardId))
     }
   }
 
-  const unlockedIds = unlockedRewards.map((r) => r.id)
+  if (catalog.length === 0) {
+    return (
+      <Card className="p-8 text-center space-y-3 bg-muted/30 border-dashed">
+        <p className="text-2xl">🎯</p>
+        <p className="font-semibold">No rewards yet</p>
+        <p className="text-sm text-muted-foreground">
+          Add a reward above to start working toward something!
+        </p>
+      </Card>
+    )
+  }
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <h3 className="font-semibold text-sm text-muted-foreground uppercase">
-          Unlocked Rewards
-        </h3>
-        <div className="space-y-2">
-          {unlockedRewards.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-4">
-              Complete tasks to unlock rewards
-            </p>
-          ) : (
-            unlockedRewards.map((reward) => (
-              <RewardCard
-                key={reward.id}
-                reward={reward}
-                isUnlocked
-                isSelected={currentGoal?.id === reward.id}
-                onSelect={handleSelectGoal}
-              />
-            ))
-          )}
-        </div>
-      </div>
-
-      {catalog.length > unlockedRewards.length && (
-        <div className="space-y-2 pt-4 border-t">
-          <h3 className="font-semibold text-sm text-muted-foreground uppercase">
-            Locked Rewards
-          </h3>
-          <div className="space-y-2">
-            {catalog
-              .filter((r) => !unlockedIds.includes(r.id))
-              .map((reward) => (
-                <RewardCard
-                  key={reward.id}
-                  reward={reward}
-                  isUnlocked={false}
-                  isSelected={false}
-                  onSelect={() => {}}
-                />
-              ))}
-          </div>
-        </div>
-      )}
+    <div className="space-y-3">
+      {sorted.map((reward) => (
+        <RewardCard
+          key={reward.id}
+          reward={reward}
+          isUnlocked={unlockedIds.includes(reward.id)}
+          isSelected={currentGoal?.id === reward.id}
+          onSelect={handleSelectGoal}
+          onDelete={handleDeleteReward}
+        />
+      ))}
     </div>
   )
 }
