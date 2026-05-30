@@ -2,6 +2,7 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Check, Trash2 } from 'lucide-react'
+import { fireRewardConfetti } from '@/lib/confetti'
 import type { Reward } from '@/types'
 
 interface RewardCardProps {
@@ -44,7 +45,18 @@ export default function RewardCard({
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
               {isUnlocked && (
-                <Check className="w-4 h-4 text-green-600" />
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    fireRewardConfetti()
+                  }}
+                  className="p-1 rounded-full hover:bg-green-100 transition-colors"
+                  title="Celebrate!"
+                  aria-label="Celebrate this reward"
+                >
+                  <Check className="w-4 h-4 text-green-600" />
+                </button>
               )}
               <Button
                 variant="ghost"

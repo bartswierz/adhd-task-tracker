@@ -1,18 +1,18 @@
-import { useState } from 'react'
-import { Plus } from 'lucide-react'
-import LayoutShell from '@/components/LayoutShell'
-import RewardCatalog from '@/features/rewards/components/RewardCatalog'
-import GoalProgressBar from '@/features/rewards/components/GoalProgressBar'
-import PointsBadge from '@/features/rewards/components/PointsBadge'
-import RewardFormSheet from '@/features/rewards/components/RewardFormSheet'
-import { Button } from '@/components/ui/button'
-import { useAppSelector } from '@/hooks/useAppSelector'
-import { selectCurrentGoalReward, selectTotalPoints } from '@/store/selectors'
+import { useState } from "react";
+import { Plus } from "lucide-react";
+import LayoutShell from "@/components/LayoutShell";
+import RewardCatalog from "@/features/rewards/components/RewardCatalog";
+import GoalProgressBar from "@/features/rewards/components/GoalProgressBar";
+import PointsBadge from "@/features/rewards/components/PointsBadge";
+import RewardFormSheet from "@/features/rewards/components/RewardFormSheet";
+import { Button } from "@/components/ui/button";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { selectCurrentGoalReward, selectTotalPoints } from "@/store/selectors";
 
 export default function RewardsPage() {
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const totalPoints = useAppSelector(selectTotalPoints)
-  const currentGoal = useAppSelector(selectCurrentGoalReward)
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const totalPoints = useAppSelector(selectTotalPoints);
+  const currentGoal = useAppSelector(selectCurrentGoalReward);
 
   return (
     <LayoutShell>
@@ -47,5 +47,5 @@ export default function RewardsPage() {
 
       <RewardFormSheet open={isFormOpen} onOpenChange={setIsFormOpen} />
     </LayoutShell>
-  )
+  );
 }

@@ -1,38 +1,44 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@/components/ui/sheet'
-import RewardForm from './RewardForm'
-import useRewardActions from '../hooks/useRewardActions'
+} from "@/components/ui/sheet";
+import RewardForm from "./RewardForm";
+import useRewardActions from "../hooks/useRewardActions";
 
 interface RewardFormSheetProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export default function RewardFormSheet({ open, onOpenChange }: RewardFormSheetProps) {
-  const [isLoading, setIsLoading] = useState(false)
-  const { handleAddReward } = useRewardActions()
+export default function RewardFormSheet({
+  open,
+  onOpenChange,
+}: RewardFormSheetProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const { handleAddReward } = useRewardActions();
 
   const handleSubmit = (
     title: string,
     description: string,
     emoji: string,
-    pointCost: number
+    pointCost: number,
   ) => {
-    setIsLoading(true)
-    handleAddReward(title, description, emoji, pointCost)
-    setIsLoading(false)
-    onOpenChange(false)
-  }
+    setIsLoading(true);
+    handleAddReward(title, description, emoji, pointCost);
+    setIsLoading(false);
+    onOpenChange(false);
+  };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="rounded-t-lg max-h-[90vh] overflow-y-auto">
+      <SheetContent
+        side="bottom"
+        className="rounded-t-lg max-h-[90vh] overflow-y-auto px-[2%]"
+      >
         <SheetHeader>
           <SheetTitle>Add a reward</SheetTitle>
           <SheetDescription>
@@ -44,5 +50,5 @@ export default function RewardFormSheet({ open, onOpenChange }: RewardFormSheetP
         </div>
       </SheetContent>
     </Sheet>
-  )
+  );
 }
