@@ -14,7 +14,7 @@ export default function LayoutShell({ children }: LayoutShellProps) {
   const isRewards = location.pathname === '/rewards'
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-background">
       <main className="flex-1 overflow-auto">{children}</main>
 
       {(isHome || isRewards) && (
