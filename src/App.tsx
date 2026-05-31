@@ -51,7 +51,7 @@ export default function App() {
     <Provider store={store}>
       <Router>
         <AppContent />
-        <Toaster position="bottom-center" />
+        <Toaster position="bottom-center" offset="80px" />
       </Router>
     </Provider>
   )
