@@ -4,7 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>adhd_task_tracker</title>
+    <title>ADHD Task Tracker</title>
+    <script>
+      try {
+        const stored = JSON.parse(localStorage.getItem('adhd-tracker-v1') || '{}')
+        const isDark = stored?.settings?.isDarkMode ?? true
+        if (isDark) document.documentElement.classList.add('dark')
+      } catch (e) {
+        document.documentElement.classList.add('dark')
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -4,7 +4,7 @@ import { Provider, useDispatch } from 'react-redux'
 import { Toaster } from 'sonner'
 import { store } from '@/store/store'
 import { checkAndResetStreak } from '@/store/slices/streakSlice'
-import { selectHasCompletedOnboarding } from '@/store/selectors'
+import { selectHasCompletedOnboarding, selectIsDarkMode } from '@/store/selectors'
 import OnboardingPage from '@/pages/OnboardingPage'
 import HomePage from '@/pages/HomePage'
 import RewardsPage from '@/pages/RewardsPage'
@@ -13,10 +13,19 @@ import { useAppSelector } from '@/hooks/useAppSelector'
 function AppContent() {
   const dispatch = useDispatch()
   const hasCompletedOnboarding = useAppSelector(selectHasCompletedOnboarding)
+  const isDarkMode = useAppSelector(selectIsDarkMode)
 
   useEffect(() => {
     dispatch(checkAndResetStreak())
   }, [dispatch])
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [isDarkMode])
 
   if (!hasCompletedOnboarding) {
     return (

@@ -63,3 +63,5 @@ export const selectHasCompletedOnboarding = (state: RootState) =>
 
 export const selectAffirmationsEnabled = (state: RootState) =>
   state.settings.affirmationsEnabled
+
+export const selectIsDarkMode = (state: RootState) => state.settings.isDarkMode

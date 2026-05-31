@@ -2,6 +2,13 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 const EMOJI_OPTIONS = [
   '🎯', '☕', '🍪', '🎮', '🍿', '🎉', '😌', '🍕',
@@ -18,21 +25,18 @@ export default function RewardForm({ onSubmit, isLoading }: RewardFormProps) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [emoji, setEmoji] = useState('🎯')
-  const [pointCost, setPointCost] = useState('')
+  const [pointCost, setPointCost] = useState<number>(10)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const cost = parseInt(pointCost, 10)
-    if (title.trim() && cost >= 1) {
-      onSubmit(title.trim(), description.trim(), emoji, cost)
+    if (title.trim()) {
+      onSubmit(title.trim(), description.trim(), emoji, pointCost)
       setTitle('')
       setDescription('')
       setEmoji('🎯')
-      setPointCost('')
+      setPointCost(10)
     }
   }
-
-  const isValid = title.trim().length > 0 && parseInt(pointCost, 10) >= 1
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -82,20 +86,25 @@ export default function RewardForm({ onSubmit, isLoading }: RewardFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="reward-points">Points required</Label>
-        <Input
-          id="reward-points"
-          type="number"
-          min="1"
-          placeholder="e.g., 100"
-          value={pointCost}
-          onChange={(e) => setPointCost(e.target.value)}
+        <Select
+          value={String(pointCost)}
+          onValueChange={(v: string) => setPointCost(Number(v))}
           disabled={isLoading}
-        />
+        >
+          <SelectTrigger id="reward-points">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="10">10 pts (Easy)</SelectItem>
+            <SelectItem value="25">25 pts (Medium)</SelectItem>
+            <SelectItem value="50">50 pts (Hard)</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <Button
         type="submit"
-        disabled={!isValid || isLoading}
+        disabled={!title.trim() || isLoading}
         className="w-full"
       >
         {isLoading ? 'Adding...' : 'Add Reward'}

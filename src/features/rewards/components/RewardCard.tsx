@@ -23,11 +23,13 @@ export default function RewardCard({
   return (
     <Card
       className={`p-4 transition-all cursor-pointer ${
+        isUnlocked ? 'bg-green-50' : 'opacity-60 bg-muted/30'
+      } ${
         isSelected
-          ? 'ring-2 ring-primary bg-primary/5'
+          ? 'ring-2 ring-primary'
           : isUnlocked
-            ? 'hover:shadow-md hover:bg-muted/50'
-            : 'opacity-60 bg-muted/30'
+            ? 'hover:shadow-md hover:bg-green-100'
+            : ''
       }`}
       onClick={() => isUnlocked && onSelect(reward.id)}
     >

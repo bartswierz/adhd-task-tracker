@@ -40,6 +40,7 @@ export interface SettingsState {
   hasCompletedOnboarding: boolean
   affirmationsEnabled: boolean
   lastAffirmationShownAt: string | null
+  isDarkMode: boolean
 }
 
 export interface RootState {

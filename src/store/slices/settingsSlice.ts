@@ -7,6 +7,7 @@ const initialState: SettingsState = {
   hasCompletedOnboarding: false,
   affirmationsEnabled: false,
   lastAffirmationShownAt: null,
+  isDarkMode: true,
 }
 
 const settingsSlice = createSlice({
@@ -25,6 +26,9 @@ const settingsSlice = createSlice({
     setLastAffirmationShownAt: (state, action: PayloadAction<string>) => {
       state.lastAffirmationShownAt = action.payload
     },
+    toggleDarkMode: (state) => {
+      state.isDarkMode = !state.isDarkMode
+    },
   },
 })
 
@@ -33,6 +37,7 @@ export const {
   completeOnboarding,
   toggleAffirmations,
   setLastAffirmationShownAt,
+  toggleDarkMode,
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

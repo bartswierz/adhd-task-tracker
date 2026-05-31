@@ -40,6 +40,15 @@ export default function TaskCard({
           <Badge variant="outline" className={difficultyColor[task.difficulty]}>
             +{points[task.difficulty]}
           </Badge>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onDelete(task.id)}
+            className="h-8 w-8 text-destructive hover:text-destructive flex-shrink-0"
+            title="Delete"
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
         </div>
       </Card>
     )
